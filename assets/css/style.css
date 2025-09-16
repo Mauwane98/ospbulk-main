@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap');
+
+html, body {
+    min-height: 100vh;
+}
+
+/* Modern Theme
+-------------------------------------------------- */
+
+/* 1. Variables & Root
+-------------------------------------------------- */
+:root {
+    --primary-color: #4A2C2A; /* Deep Coffee Brown */
+    --secondary-color: #A0522D; /* Sienna Brown */
+    --accent-color: #8B4513; /* Saddle Brown */
+    --background-light: #F5F5DC; /* Beige */
+    --text-dark: #362222; /* Darker Coffee Brown */
+    --text-light: #ffffff;
+    --border-color: #D2B48C; /* Tan */
+
+    --font-family-headings: 'Playfair Display', serif;
+    --font-family-body: 'Open Sans', sans-serif;
+}
+
+/* 2. General & Typography
+-------------------------------------------------- */
+body {
+    font-family: var(--font-family-body);
+    background-image: url('../img/hero1.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
+    color: var(--text-dark);
+    line-height: 1.7;
+    padding-top: 120px; /* Adjust for navbar height */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-headings);
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); }
+
+h2 { font-size: clamp(2.2rem, 4vw, 3.5rem); }
+
+h3 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); }
+
+/* 3. Navbar
+-------------------------------------------------- */
+.navbar {
+    background-color: var(--background-light) !important;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem 0;
+    transition: padding 0.3s ease;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center; /* Vertically center the logo */
+}
+
+.navbar-brand img {
+    height: 90px; /* Default logo height for desktop */
+    transition: height 0.3s ease;
+}
+
+.nav-link {
+    font-family: var(--font-family-body);
+    font-weight: 700;
+    color: var(--text-dark) !important;
+    margin: 0 1.2rem;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+
+
+/* 4. Buttons
+-------------------------------------------------- */
+.btn {
+    font-family: var(--font-family-headings);
+    font-weight: 600;
+    border-radius: 50px; /* Pill-shaped buttons */
+    padding: 12px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: var(--text-light);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+/* 5. Hero Section
+-------------------------------------------------- */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+    padding: 10rem 0; /* Increased padding for more impact */
+}
+
+#bgvid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    transform: translateX(-50%) translateY(-50%);
+    background-size: cover;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-section h1 {
+    color: var(--text-light);
+    font-weight: 800;
+}
+
+.hero-section p {
+    font-size: 1.6rem; /* Slightly larger font size */
+    margin-bottom: 2.5rem; /* Increased margin */
+}
+
+/* 6. Cards
+-------------------------------------------------- */
+.card {
+    background-color: #fff;
+    border: none;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    height: 250px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-family: var(--font-family-headings);
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* 7. Sections
+-------------------------------------------------- */
+section {
+    padding: 6rem 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.section-title h2 {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 1rem;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--secondary-color);
+}
+
+/* 8. Animations
+-------------------------------------------------- */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Dynamic Logo Size on Scroll (Mobile Only) */
+@media (max-width: 768px) {
+    body {
+        padding-top: 120px; /* Default padding for mobile non-homepage */
+    }
+
+    body.body-homepage .navbar-brand img {
+        height: 150px; /* Larger logo on homepage */
+        transition: height 0.3s ease;
+    }
+
+    .navbar.navbar-scroll-shrink .navbar-brand img {
+        height: 90px; /* Smaller logo on scroll */
+    }
+
+    .navbar.navbar-scroll-shrink {
+        padding: 0.5rem 0; /* Smaller padding on scroll */
+    }
+
+    body.body-homepage {
+        padding-top: 180px; /* Adjust for larger initial navbar height */
+    }
+
+    .navbar.navbar-scroll-shrink + main {
+        padding-top: 90px; /* Adjust main content padding when navbar shrinks */
+    }
+}
