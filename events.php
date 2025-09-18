@@ -1,56 +1,61 @@
 <?php
 require_once 'includes/header.php';
 require_once 'config/db.php';
+require_once 'admin/includes/functions.php';
+
+// Check for a valid database connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 // Fetch all events
-$result = $conn->query("SELECT * FROM events ORDER BY event_date DESC");
-
+$stmt = $conn->prepare("SELECT id, title, description, event_date, image FROM events ORDER BY event_date DESC");
+if ($stmt === false) {
+    die('Failed to prepare event query: ' . $conn->error);
+}
+$stmt->execute();
+$events = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 ?>
 
-<header class="hero-section" style="background-image: url('assets/img/hero2.jpg');">
-    <div class="container text-center">
-        <h1 class="display-2 fw-bold text-white">Our Events</h1>
-        <p class="lead fs-4 text-white-50 mb-4">Connecting Communities, Sharing Experiences</p>
+<!-- Hero Section for Events Page -->
+<section class="relative bg-cover bg-center h-[50vh] flex items-center" style="background-image: url('assets/img/hero3.jpg');">
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+    <div class="container mx-auto px-6 z-10 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Our Events</h1>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto">
+            Stay up-to-date with our community gatherings, farming workshops, and industry events.
+        </p>
     </div>
-</header>
+</section>
 
-<main>
-    <section class="py-5">
-        <div class="container">
-            <div class="section-title">
-                <h2>Upcoming Events</h2>
-                <p>Join us to learn more about our work and the coffee we love.</p>
-            </div>
-            <div class="row g-4">
-                <?php if ($result->num_rows > 0): ?>
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                        <div class="col-md-6 col-lg-4 mb-4" data-animation-class="animate__fadeInUp">
-                            <div class="card h-100">
-                                <?php if (!empty($row['image'])): ?>
-                                    <img src="assets/uploads/<?php echo htmlspecialchars($row['image']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($row['title']); ?>">
-                                <?php else: ?>
-                                    <img src="assets/img/hero3.jpg" class="card-img-top" alt="Default Event Image">
-                                <?php endif; ?>
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($row['title']); ?></h5>
-                                    <p class="card-text text-muted flex-grow-1"><?php echo htmlspecialchars(substr($row['description'], 0, 150)) . (strlen($row['description']) > 150 ? '...' : ''); ?></p>
-                                    <p class="card-text"><small class="text-muted"><i class="bi bi-calendar-event me-2"></i>Date: <?php echo date("F j, Y", strtotime($row['event_date'])); ?></small></p>
-                                    <a href="#" class="btn btn-outline-primary mt-3 align-self-start">Read More</a>
-                                </div>
-                            </div>
+<!-- Events Grid Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+        <?php if (!empty($events)): ?>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <?php foreach ($events as $event): ?>
+                    <!-- Event Card -->
+                    <div class="bg-[#f5f5f0] rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <img src="<?php echo htmlspecialchars($event['image']); ?>" alt="<?php echo htmlspecialchars($event['title']); ?>" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-deep-charcoal mb-2"><?php echo htmlspecialchars($event['title']); ?></h3>
+                            <p class="text-sm text-gray-500 mb-2">
+                                <i class="fas fa-calendar-alt text-burnt-orange"></i> <?php echo date('F j, Y', strtotime($event['event_date'])); ?>
+                            </p>
+                            <p class="text-gray-700"><?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?></p>
                         </div>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <div class="col-12 text-center">
-                        <p class="lead">No upcoming events at the moment. Please check back later.</p>
                     </div>
-                <?php endif; ?>
+                <?php endforeach; ?>
             </div>
-        </div>
-    </section>
-</main>
+        <?php else: ?>
+            <div class="text-center py-10">
+                <p class="text-xl text-gray-500">No events found at this time.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
 
 <?php
 require_once 'includes/footer.php';
-
 ?>

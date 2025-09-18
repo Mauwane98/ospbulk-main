@@ -14,6 +14,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
+  `profile_image` varchar(255) DEFAULT NULL,
   `role` ENUM('user', 'admin', 'school', 'ngo') NOT NULL DEFAULT 'user',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),

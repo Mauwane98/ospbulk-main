@@ -1,145 +1,129 @@
 <?php
+// Includes our new header, which handles session and shared HTML/CSS
 require_once 'includes/header.php';
+// We don't need a database connection here as the content is static.
 ?>
 
-<header class="hero-section text-center d-flex align-items-center justify-content-center text-white" style="background: url('assets/img/community-development.png') no-repeat center center/cover; height: 60vh;">
-    <div class="container" data-animation-class="animate__fadeIn">
-        <h1 class="display-3 fw-bold mb-3">About OSP Bulk</h1>
-        <p class="lead fs-4 mb-4">Rooted in Community, Growing with Purpose</p>
+<!-- Hero Section for About Page -->
+<section class="relative bg-cover bg-center h-[50vh] flex items-center" style="background-image: url('assets/img/hero2.jpg');">
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+    <div class="container mx-auto px-6 z-10 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">About Us</h1>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto">
+            Our journey is rooted in the rich soil of South Africa, driven by a passion for agriculture and community.
+        </p>
     </div>
-</header>
+</section>
 
-<main>
-    <section class="py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-7" data-animation-class="animate__fadeInLeft">
-                    <h2 class="display-5 fw-bold mb-4 text-dark">Our Vision & Mission</h2>
-                    <p class="lead"><strong>Vision:</strong> To cultivate a leading global reputation for premium, ethically sourced organic coffee, while simultaneously establishing a sustainable, community-driven agricultural ecosystem that ensures long-term food security and economic empowerment for rural farmers across the continent.</p>
-                    <p class="lead"><strong>Mission:</strong> To mobilize and equip rural farmers through comprehensive vocational training and collaborative partnerships, transforming them into a network of proficient organic producers. By focusing on the high-value specialty coffee market and diversifying into staple food crops, we will generate significant returns for our investors, create sustainable employment, and build a more equitable agricultural future.</p>
-                </div>
-                <div class="col-md-5" data-animation-class="animate__fadeInRight">
-                    <img src="assets/img/crop-farming.jpg" alt="Crop Farming" class="img-fluid rounded shadow-lg">
-                </div>
+<!-- Our Story Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2">
+                <img src="assets/img/farming-systems.jpg" alt="Our Story" class="rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+            </div>
+            <div class="lg:w-1/2">
+                <h2 class="text-3xl font-bold text-deep-charcoal mb-4">Our Story</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The company was founded in 2023 by Mr Mbongeni Phiri. Mr Phiri currently holds a certificate of competence as a Barista through Ciro SA Coffee Academy.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The company is based on the premise that as South Africans we are gifted with more natural resources than we can imagine and as a 100% Black Owned Company, what better way than to cultivate this notion using our expertise, experience and innate talent.
+                </p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="bg-light py-5">
-        <div class="container">
-            <h2 class="text-center display-5 fw-bold mb-4 text-dark">Company History</h2>
-            <div class="row justify-content-center" data-animation-class="animate__fadeInUp">
-                <div class="col-lg-8 text-center">
-                    <p class="fs-5">We pledge to deliver services and products with utmost quality at a competitive price using clear and transparent models. Our commitment extends to fostering sustainable practices and strong community partnerships, ensuring a resilient and profitable business model for all stakeholders.</p>
-                </div>
+<!-- A Profile in Sustainable Growth Section -->
+<section class="py-16 bg-[#f5f5f0]">
+    <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row-reverse items-center gap-12">
+            <div class="lg:w-1/2">
+                <img src="assets/img/hero1.jpg" alt="Our Profile" class="rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+            </div>
+            <div class="lg:w-1/2">
+                <h2 class="text-3xl font-bold text-deep-charcoal mb-4">A Profile in Sustainable Growth</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    OSP Bulk (Pty) Ltd is a forward-thinking agricultural enterprise dedicated to pioneering a new era of profit-driven, organic farming in Africa. Founded on the principle of Ubuntu—that we are all interconnected—the company's core mission is to empower rural communities through the cultivation of high-quality specialty coffee and essential food crops, thereby fostering both economic prosperity and regional food security. We believe that sustainable practices and strong community partnerships are not just ethical choices, but the foundation for a resilient and profitable business model.
+                </p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="py-5">
-        <div class="container">
-            <h2 class="text-center display-5 fw-bold mb-4 text-dark">Our Management Team</h2>
-            <div class="row justify-content-center text-center">
-                <div class="col-md-4 mb-4" data-animation-class="animate__zoomIn">
-                    <div class="card h-100 shadow-sm border-0 rounded-3 p-3">
-                        <img src="assets/img/mbongeni.jpg" class="img-fluid rounded-circle mb-3 mx-auto" alt="Mbongeni Phiri" style="width: 180px; height: 180px; object-fit: cover;">
-                        <h4 class="fw-bold">Mbongeni Phiri</h4>
-                        <p class="text-muted mb-1">Director</p>
-                        <p class="text-muted"><i class="bi bi-phone me-2"></i>+2772 346 4667</p>
-                        <p class="text-muted"><i class="bi bi-envelope me-2"></i>mbongeni.phiri@ospbulk.co.za</p>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4" data-animation-class="animate__zoomIn animate__delay-1s">
-                    <div class="card h-100 shadow-sm border-0 rounded-3 p-3">
-                        <img src="assets/img/thabisile_ncube.jpg" class="img-fluid rounded-circle mb-3 mx-auto" alt="Thabisile Ncube" style="width: 180px; height: 180px; object-fit: cover;">
-                        <h4 class="fw-bold">Thabisile Ncube</h4>
-                        <p class="text-muted mb-1">Non-Executive Director</p>
-                        <p class="text-muted"><i class="bi bi-envelope me-2"></i>thabisile.ncube@ospbulk.co.za</p>
-                    </div>
-                </div>
+<!-- Mission and Vision Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold text-deep-charcoal mb-4">Our Mission & Vision</h2>
+        <div class="flex flex-col md:flex-row gap-8 mt-8">
+            <div class="md:w-1/2 bg-[#f5f5f0] rounded-lg shadow-md p-8 transform hover:scale-105 transition-transform duration-300">
+                <h3 class="text-xl font-semibold mb-3 text-burnt-orange">Vision Statement</h3>
+                <p class="text-gray-600">
+                    To cultivate a leading global reputation for premium, ethically sourced organic coffee, while simultaneously establishing a sustainable, community-driven agricultural ecosystem that ensures long-term food security and economic empowerment for rural farmers across the continent.
+                </p>
+            </div>
+            <div class="md:w-1/2 bg-[#f5f5f0] rounded-lg shadow-md p-8 transform hover:scale-105 transition-transform duration-300">
+                <h3 class="text-xl font-semibold mb-3 text-burnt-orange">Mission Statement</h3>
+                <p class="text-gray-600">
+                    To mobilize and equip rural farmers through comprehensive vocational training and collaborative partnerships, transforming them into a network of proficient organic producers. By focusing on the high-value specialty coffee market and diversifying into staple food crops, we will generate significant returns for our investors, create sustainable employment, and build a more equitable agricultural future.
+                </p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="bg-light py-5">
-        <div class="container">
-            <h2 class="text-center display-5 fw-bold mb-4 text-dark">Core Business Strategy</h2>
-            <div class="row" data-animation-class="animate__fadeInUp">
-                <div class="col-md-6">
-                    <h3 class="fw-bold text-dark"><i class="bi bi-cup-hot-fill me-2"></i>1. Specialty Coffee: The Engine for Profit</h3>
-                    <ul>
-                        <li><strong>Organic Production:</strong> We are committed to a fully organic cultivation process for all our coffee crops. This not only meets the growing demand for sustainable products but also commands a premium price in international markets.</li>
-                        <li><strong>Market Expansion:</strong> Our goal is to build a robust network of strategic partners and investors to expand our coffee sourcing and export channels, ensuring profitable growth and stable market access.</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h3 class="fw-bold text-accent"><i class="bi bi-seed-fill me-2"></i>2. Food Security: The Foundation for Community</h3>
-                    <ul>
-                        <li><strong>Crop Diversification:</strong> Producing staple crops like rice, ground nuts, and fresh produce to mitigate risk and directly contributes to local food security, reinforcing our commitment to the well-being of the communities we serve.</li>
-                        <li><strong>Vocational Training Program:</strong> We will establish a comprehensive vocational training program for rural farmers. This initiative will provide hands-on education in organic farming techniques, crop management, and business skills. By equipping farmers with these skills, we are not just creating suppliers; we are building a network of empowered entrepreneurs.</li>
-                    </ul>
-                </div>
+<!-- Core Business Strategy Section -->
+<section class="py-16 bg-[#f5f5f0]">
+    <div class="container mx-auto px-6">
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-deep-charcoal mb-4">Core Business Strategy</h2>
+            <p class="text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                Our strategy is built on a dual-pronged approach that leverages the high-value specialty coffee market to fund and sustain broader agricultural and social initiatives.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Meet Our Team Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center text-deep-charcoal mb-12">Meet Our Team</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Team Member 1 -->
+            <div class="flex flex-col items-center text-center">
+                <img src="assets/img/mbongeni.jpg" alt="Mbongeni Phiri" class="w-40 h-40 rounded-full object-cover mb-4 border-4 border-golden-yellow">
+                <h3 class="text-xl font-semibold text-deep-charcoal">Mbongeni Phiri</h3>
+                <p class="text-burnt-orange">1st Director</p>
+                <p class="text-gray-600 mt-2">Contact: +2772 346 4667</p>
+                <p class="text-gray-600">Email: mbongeni.phiri@ospbulk.co.za</p>
+            </div>
+            <!-- Team Member 2 -->
+            <div class="flex flex-col items-center text-center">
+                <img src="assets/img/thabisile_ncube.jpg" alt="Thabisile Ncube" class="w-40 h-40 rounded-full object-cover mb-4 border-4 border-golden-yellow">
+                <h3 class="text-xl font-semibold text-deep-charcoal">Thabisile Ncube</h3>
+                <p class="text-burnt-orange">2nd Director – Non Executive</p>
+                <p class="text-gray-600 mt-2">Contact: +2765 332 1771</p>
+                <p class="text-gray-600">Email: thabisile.ncube@ospbulk.co.za</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="py-5">
-        <div class="container">
-            <h2 class="text-center display-5 fw-bold mb-4 text-dark">Our Service Pledge</h2>
-            <div class="row justify-content-center" data-animation-class="animate__fadeInUp">
-                <div class="col-lg-8 text-center">
-                    <p class="fs-5">We pledge to deliver services and products with utmost quality at a competitive price using clear and transparent models. Our commitment extends to fostering sustainable practices and strong community partnerships, ensuring a resilient and profitable business model for all stakeholders.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center display-5 fw-bold mb-5 text-dark">Frequently Asked Questions</h2>
-            <div class="accordion accordion-flush" id="faqAccordion">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingOne">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                            What kind of products does OSP Bulk offer?
-                        </button>
-                    </h2>
-                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            OSP Bulk specializes in premium organic coffee and essential food crops such as rice, groundnuts, and fresh produce. We are committed to sustainable and ethical farming practices.
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                            How does OSP Bulk support local communities?
-                        </button>
-                    </h2>
-                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            We empower rural communities through comprehensive vocational training programs in organic farming techniques, crop management, and business skills. Our goal is to create a network of empowered entrepreneurs and ensure long-term food security.
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                            Is OSP Bulk committed to organic farming?
-                        </button>
-                    </h2>
-                    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Absolutely. We are fully committed to organic cultivation processes for all our crops. This not only meets the growing demand for sustainable products but also ensures the health of our land and communities.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-</main>
+<!-- Call to Action Section -->
+<section class="py-16 bg-golden-yellow text-center text-deep-charcoal">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-4">Join Our Journey</h2>
+        <p class="text-lg mb-8">
+            Learn more about our mission and how we're making a difference.
+        </p>
+        <a href="contact.php" class="bg-burnt-orange text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#e26a0a] transition-colors duration-300 transform hover:scale-105">
+            Contact Us
+        </a>
+    </div>
+</section>
 
 <?php
+// Includes the new footer
 require_once 'includes/footer.php';
 ?>

@@ -1,154 +1,76 @@
 <?php
+// Includes our new header, which handles session and shared HTML/CSS
 require_once 'includes/header.php';
+// Include database connection and functions
 require_once 'config/db.php';
+require_once 'admin/includes/functions.php';
 
-$search_query = $_GET['q'] ?? '';
-$category_id = $_GET['category_id'] ?? '';
-
-$sanitized_search_query = '%' . $conn->real_escape_string($search_query) . '%';
-
-// Fetch categories for the filter dropdown
-$categories_result = $conn->query("SELECT id, name FROM categories ORDER BY name ASC");
-$categories = [];
-while ($row = $categories_result->fetch_assoc()) {
-    $categories[] = $row;
+// Check for a valid database connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Base SQL for products and services
-$products_sql = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.is_service = 0";
-$services_sql = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.is_service = 1";
-
-// Add search query to SQL
-if (!empty($search_query)) {
-    $products_sql .= " AND (p.name LIKE '" . $sanitized_search_query . "' OR p.description LIKE '" . $sanitized_search_query . "')";
-    $services_sql .= " AND (p.name LIKE '" . $sanitized_search_query . "' OR p.description LIKE '" . $sanitized_search_query . "')";
+// Fetch all products
+$stmt = $conn->prepare("SELECT id, name, description, image, price FROM products");
+if ($stmt === false) {
+    die('Failed to prepare product query: ' . $conn->error);
 }
-
-// Add category filter to SQL
-if (!empty($category_id)) {
-    $products_sql .= " AND p.category_id = " . (int)$category_id;
-    $services_sql .= " AND p.category_id = " . (int)$category_id;
-}
-
-$products_sql .= " ORDER BY p.name ASC";
-$services_sql .= " ORDER BY p.name ASC";
-
-$products_result = $conn->query($products_sql);
-$services_result = $conn->query($services_sql);
-
+$stmt->execute();
+$products = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 ?>
 
-<header class="hero-section" style="background-image: url('assets/img/foodbeverage.jpg');">
-    <div class="container text-center">
-        <h1 class="display-2 fw-bold text-white">Our Products & Services</h1>
-        <p class="lead fs-4 text-white-50 mb-4">Quality and Sustainability in Everything We Do</p>
+<!-- Hero Section for Products Page -->
+<section class="relative bg-cover bg-center h-[50vh] flex items-center" style="background-image: url('assets/img/coffeeproducts.jpg');">
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+    <div class="container mx-auto px-6 z-10 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Our Products</h1>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto">
+            Discover our wide range of high-quality agricultural products, sustainably sourced from South African farms.
+        </p>
     </div>
-</header>
+</section>
 
-<main>
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center mb-4">
-                <div class="col-md-8">
-                    <form action="products.php" method="GET">
-                        <div class="row g-2 mb-3">
-                            <div class="col-sm-6">
-                                <input class="form-control" type="search" placeholder="Search products or services..." aria-label="Search" name="q" value="<?php echo htmlspecialchars($search_query); ?>">
-                            </div>
-                            <div class="col-sm-4">
-                                <select class="form-select" name="category_id">
-                                    <option value="">All Categories</option>
-                                    <?php foreach ($categories as $category): ?>
-                                        <option value="<?php echo $category['id']; ?>" <?php echo ($category_id == $category['id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($category['name']); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-sm-2">
-                                <button class="btn btn-primary w-100" type="submit">Search</button>
-                            </div>
+<!-- Products Grid Section -->
+<section class="py-16 bg-[#f5f5f0]">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center text-deep-charcoal mb-12">Browse Our Offerings</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <?php if (!empty($products)): ?>
+                <?php foreach ($products as $product): ?>
+                    <!-- Product Card -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 transform hover:scale-105 transition-transform duration-300">
+                        <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="w-full h-56 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-deep-charcoal mb-2"><?php echo htmlspecialchars($product['name']); ?></h3>
+                            <p class="text-sm text-gray-500 mb-4"><?php echo htmlspecialchars(substr($product['description'], 0, 75)) . '...'; ?></p>
+                            <a href="product_detail.php?id=<?php echo $product['id']; ?>" class="inline-block bg-burnt-orange text-white py-2 px-4 rounded-full text-sm font-medium hover:bg-[#e26a0a] transition-colors duration-300">View Product</a>
                         </div>
-                    </form>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-span-full text-center py-10">
+                    <p class="text-xl text-gray-500">No products found.</p>
                 </div>
-            </div>
-
-            <ul class="nav nav-pills justify-content-center mb-5" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="products-tab" data-bs-toggle="tab" data-bs-target="#products" type="button" role="tab" aria-controls="products" aria-selected="true">Products</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#services" type="button" role="tab" aria-controls="services" aria-selected="false">Services</button>
-                </li>
-            </ul>
-
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="products" role="tabpanel" aria-labelledby="products-tab">
-                    <div class="section-title">
-                        <h2>Our Products</h2>
-                        <p>Discover our range of premium organic products.</p>
-                    </div>
-                    <div class="row g-4">
-                        <?php if ($products_result->num_rows > 0): ?>
-                            <?php while ($row = $products_result->fetch_assoc()): ?>
-                                <div class="col-md-4 mb-4" data-animation-class="animate__fadeInUp">
-                                    <div class="card h-100">
-                                        <?php if (!empty($row['image'])): ?>
-                                            <img src="assets/uploads/<?php echo htmlspecialchars($row['image']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($row['name']); ?>">
-                                        <?php else: ?>
-                                            <img src="assets/img/coffeeproducts.jpg" class="card-img-top" alt="Default Product Image">
-                                        <?php endif; ?>
-                                        <div class="card-body d-flex flex-column">
-                                            <h5 class="card-title"><?php echo htmlspecialchars($row['name']); ?></h5>
-                                            <p class="card-text text-muted flex-grow-1"><?php echo htmlspecialchars(substr($row['description'], 0, 150)) . (strlen($row['description']) > 150 ? '...' : ''); ?></p>
-                                            <?php if (!empty($row['category_name'])): ?>
-                                                <p class="card-text"><small class="text-muted">Category: <?php echo htmlspecialchars($row['category_name']); ?></small></p>
-                                            <?php endif; ?>
-                                            <a href="product_detail.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-primary mt-3 align-self-start">View Details</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endwhile; ?>
-                        <?php else: ?>
-                            <div class="col-12 text-center">
-                                <p class="lead">No products available at the moment.</p>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
-                    <div class="section-title">
-                        <h2>Our Services</h2>
-                        <p>Explore the services we offer to support sustainable agriculture.</p>
-                    </div>
-                    <div class="row g-4">
-                        <?php if ($services_result->num_rows > 0): ?>
-                            <?php while ($row = $services_result->fetch_assoc()): ?>
-                                <div class="col-md-4 mb-4" data-animation-class="animate__fadeInUp">
-                                    <div class="card h-100">
-                                        <div class="card-body d-flex flex-column">
-                                            <h5 class="card-title"><?php echo htmlspecialchars($row['name']); ?></h5>
-                                            <p class="card-text text-muted flex-grow-1"><?php echo htmlspecialchars(substr($row['description'], 0, 150)) . (strlen($row['description']) > 150 ? '...' : ''); ?></p>
-                                            <?php if (!empty($row['category_name'])): ?>
-                                                <p class="card-text"><small class="text-muted">Category: <?php echo htmlspecialchars($row['category_name']); ?></small></p>
-                                            <?php endif; ?>
-                                            <a href="product_detail.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-primary mt-3 align-self-start">View Details</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endwhile; ?>
-                        <?php else: ?>
-                            <div class="col-12 text-center">
-                                <p class="lead">No services available at the moment.</p>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
+            <?php endif; ?>
         </div>
-    </section>
-</main>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-16 bg-golden-yellow text-center text-deep-charcoal">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-4">Can't find what you're looking for?</h2>
+        <p class="text-lg mb-8">
+            Let us know your specific needs, and we'll help you find the right solution.
+        </p>
+        <a href="contact.php" class="bg-burnt-orange text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#e26a0a] transition-colors duration-300 transform hover:scale-105">
+            Contact Us
+        </a>
+    </div>
+</section>
 
 <?php
+// Includes the new footer
 require_once 'includes/footer.php';
-
 ?>

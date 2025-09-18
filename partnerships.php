@@ -1,46 +1,75 @@
 <?php
 require_once 'includes/header.php';
 require_once 'config/db.php';
+require_once 'admin/includes/functions.php';
 
-// Fetch all partnerships
-$partnerships_result = $conn->query("SELECT * FROM partnerships ORDER BY created_at DESC");
-
+// Fetch partners if needed, but for now, we'll use a static content approach
+// $stmt = $conn->prepare("SELECT id, name, description, logo_url FROM partnerships");
+// ...
 ?>
 
-<header class="hero-section" style="background-image: url('assets/img/farming-systems.jpg');">
-    <div class="container text-center">
-        <h1 class="display-2 fw-bold text-white">Our Partnerships</h1>
-        <p class="lead fs-4 text-white-50 mb-4">Collaborating for a Sustainable Future</p>
+<!-- Hero Section for Partnerships Page -->
+<section class="relative bg-cover bg-center h-[50vh] flex items-center" style="background-image: url('assets/img/community-development.png');">
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+    <div class="container mx-auto px-6 z-10 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Our Partnerships</h1>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto">
+            Building strong, sustainable relationships is at the heart of our success.
+        </p>
     </div>
-</header>
+</section>
 
-<main class="container my-5">
-    <div class="row g-4">
-        <?php if ($partnerships_result->num_rows > 0): ?>
-            <?php while ($partnership = $partnerships_result->fetch_assoc()): ?>
-                <div class="col-md-6 col-lg-4" data-animation-class="animate__fadeInUp">
-                    <div class="card h-100 shadow-sm border-0 rounded-3 p-4">
-                        <?php if (!empty($partnership['logo'])): ?>
-                            <img src="assets/uploads/<?php echo htmlspecialchars($partnership['logo']); ?>" class="card-img-top mx-auto mb-3" alt="<?php echo htmlspecialchars($partnership['partner_name']); ?>" style="max-width: 150px; height: auto; object-fit: contain;">
-                        <?php endif; ?>
-                        <h5 class="card-title fw-bold text-center mb-3"><?php echo htmlspecialchars($partnership['partner_name']); ?></h5>
-                        <p class="card-text text-muted flex-grow-1"><?php echo htmlspecialchars($partnership['description']); ?></p>
-                        <?php if (!empty($partnership['impact_details'])): ?>
-                            <div class="mt-3">
-                                <h6 class="fw-bold">Impact:</h6>
-                                <p class="text-muted"><?php echo htmlspecialchars($partnership['impact_details']); ?></p>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+<!-- Partnerships Value Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold text-deep-charcoal mb-12">Why Partner With Us?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Value Prop 1 -->
+            <div class="bg-[#f5f5f0] p-8 rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300">
+                <div class="text-5xl text-burnt-orange mb-4">
+                    <i class="fas fa-handshake"></i> <!-- Placeholder for a handshake icon -->
                 </div>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <div class="col-12 text-center">
-                <p class="lead">No partnerships found at the moment.</p>
+                <h3 class="text-xl font-semibold text-deep-charcoal mb-3">Mutual Growth</h3>
+                <p class="text-gray-600">
+                    We believe in a symbiotic relationship where our success is tied to yours. We invest in long-term partnerships that drive mutual growth.
+                </p>
             </div>
-        <?php endif; ?>
+            <!-- Value Prop 2 -->
+            <div class="bg-[#f5f5f0] p-8 rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300">
+                <div class="text-5xl text-burnt-orange mb-4">
+                    <i class="fas fa-seedling"></i> <!-- Placeholder for a seedling icon -->
+                </div>
+                <h3 class="text-xl font-semibold text-deep-charcoal mb-3">Sustainable Impact</h3>
+                <p class="text-gray-600">
+                    Our partnerships are built on a foundation of sustainability, ensuring we make a positive impact on both the environment and local communities.
+                </p>
+            </div>
+            <!-- Value Prop 3 -->
+            <div class="bg-[#f5f5f0] p-8 rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300">
+                <div class="text-5xl text-burnt-orange mb-4">
+                    <i class="fas fa-chart-line"></i> <!-- Placeholder for a chart-line icon -->
+                </div>
+                <h3 class="text-xl font-semibold text-deep-charcoal mb-3">Market Access</h3>
+                <p class="text-gray-600">
+                    Benefit from our extensive network and logistics expertise, providing you with seamless access to new and international markets.
+                </p>
+            </div>
+        </div>
     </div>
-</main>
+</section>
+
+<!-- Call to Action -->
+<section class="py-16 bg-golden-yellow text-center text-deep-charcoal">
+    <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-4">Ready to Grow with Us?</h2>
+        <p class="text-lg mb-8">
+            Join our network of trusted partners and help us build a better future together.
+        </p>
+        <a href="contact.php" class="bg-burnt-orange text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#e26a0a] transition-colors duration-300 transform hover:scale-105">
+            Become a Partner
+        </a>
+    </div>
+</section>
 
 <?php
 require_once 'includes/footer.php';

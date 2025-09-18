@@ -1,86 +1,67 @@
 <?php
-session_start();
 require_once 'includes/header.php';
 require_once 'config/db.php';
+require_once 'admin/includes/functions.php';
 
+session_start();
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username_or_email = trim($_POST['username_or_email']);
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    if (empty($username_or_email) || empty($password)) {
-        $message = '<div class="alert alert-danger">Please enter both username/email and password.</div>';
+    // Validate inputs
+    if (empty($email) || empty($password)) {
+        $message = 'Email and password are required.';
     } else {
-        // Prepare a statement to prevent SQL injection
-        $stmt = $conn->prepare("SELECT id, username, password, email, role FROM users WHERE username = ? OR email = ?");
-        $stmt->bind_param("ss", $username_or_email, $username_or_email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
-
-            // Verify password
-            if (password_verify($password, $user['password'])) {
-                // Password is correct, start a new session
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['role'] = $user['role'];
-
-                // Redirect user based on role
-                if ($user['role'] === 'admin') {
-                    header("Location: admin/dashboard.php");
-                } else {
-                    header("Location: index.php"); // Redirect regular users to homepage or a user dashboard
-                }
-                exit();
-            } else {
-                $message = '<div class="alert alert-danger">Invalid username/email or password.</div>';
-            }
+        $stmt = $conn->prepare("SELECT id, password FROM admins WHERE email = ?");
+        if ($stmt === false) {
+            $message = 'Database error: ' . $conn->error;
         } else {
-            $message = '<div class="alert alert-danger">Invalid username/email or password.</div>';
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $admin = $result->fetch_assoc();
+            $stmt->close();
+
+            if ($admin && password_verify($password, $admin['password'])) {
+                $_SESSION['admin_id'] = $admin['id'];
+                header("Location: admin/dashboard.php");
+                exit;
+            } else {
+                $message = 'Invalid email or password.';
+            }
         }
-        $stmt->close();
     }
 }
 ?>
 
-<main class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow-lg border-0 rounded-lg mt-5" data-animation-class="animate__fadeInUp">
-                <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
-                <div class="card-body">
-                    <?php echo $message; ?>
-                    <form action="login.php" method="POST">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="username_or_email" name="username_or_email" placeholder="Username or Email" required>
-                            <label for="username_or_email">Username or Email</label>
-                        </div>
-                        <div class="form-floating mb-3 position-relative">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                            <label for="password">Password</label>
-                            <span class="position-absolute end-0 top-50 translate-middle-y pe-3" style="cursor: pointer;" onclick="togglePasswordVisibility('password', 'togglePasswordIcon')">
-                                <i class="far fa-eye" id="togglePasswordIcon"></i>
-                            </span>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
-                        </div>
-                        <div class="mt-3 text-center">
-                            <a href="forgot_password.php">Forgot Password?</a>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center py-3">
-                    <div class="small">Don't have an account? <a href="register.php">Sign up!</a></div>
-                </div>
-            </div>
+<div class="flex items-center justify-center min-h-screen bg-[#f5f5f0]">
+    <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-deep-charcoal">Admin Login</h1>
+            <p class="text-gray-500">Sign in to your account</p>
         </div>
+        <?php if ($message): ?>
+            <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                <?php echo htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
+        <form action="login.php" method="POST" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-burnt-orange focus:ring focus:ring-burnt-orange focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-burnt-orange focus:ring focus:ring-burnt-orange focus:ring-opacity-50">
+            </div>
+            <button type="submit" class="w-full bg-burnt-orange text-white py-3 px-4 rounded-full font-semibold hover:bg-[#e26a0a] transition-colors duration-300">
+                Log In
+            </button>
+        </form>
     </div>
-</main>
+</div>
 
 <?php
 require_once 'includes/footer.php';

@@ -1,71 +1,61 @@
 <?php
 require_once 'includes/header.php';
 require_once 'config/db.php';
+require_once 'admin/includes/functions.php';
 
-$post_id = $_GET['id'] ?? null;
-$post = null;
-
-if ($post_id) {
-    // Fetch single post
-    $stmt = $conn->prepare("SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?");
-    $stmt->bind_param("i", $post_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $post = $result->fetch_assoc();
-    $stmt->close();
-} else {
-    // Fetch all posts
-    $posts_result = $conn->query("SELECT p.*, u.username FROM posts p JOIN users u ON p.user_id = u.id ORDER BY p.published_at DESC");
+// Check for a valid database connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
+// Fetch all posts
+$stmt = $conn->prepare("SELECT id, title, content, created_at, image FROM posts ORDER BY created_at DESC");
+if ($stmt === false) {
+    die('Failed to prepare post query: ' . $conn->error);
+}
+$stmt->execute();
+$posts = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 ?>
 
-<header class="hero-section" style="background-image: url('assets/img/hero3.jpg');">
-    <div class="container text-center fade-in">
-        <h1 class="display-2 fw-bold text-white"><?php echo $post ? htmlspecialchars($post['title']) : 'Latest News & Updates'; ?></h1>
-        <p class="lead fs-4 text-white-50 mb-4"><?php echo $post ? 'By ' . htmlspecialchars($post['username']) . ' on ' . date("F j, Y", strtotime($post['published_at'])) : 'Stay informed with our latest articles and announcements.'; ?></p>
+<!-- Hero Section for News Page -->
+<section class="relative bg-cover bg-center h-[50vh] flex items-center" style="background-image: url('assets/img/crop-farming.jpg');">
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+    <div class="container mx-auto px-6 z-10 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Latest News</h1>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto">
+            Stay informed with the latest updates from our farms and community.
+        </p>
     </div>
-</header>
+</section>
 
-<main class="container my-5">
-    <?php if ($post): // Display single post ?>
-        <div class="row justify-content-center">
-            <div class="col-lg-8" data-animation-class="animate__fadeInUp">
-                <?php if (!empty($post['image'])): ?>
-                    <img src="assets/uploads/<?php echo htmlspecialchars($post['image']); ?>" class="img-fluid rounded mb-4" alt="<?php echo htmlspecialchars($post['title']); ?>">
-                <?php endif; ?>
-                <div class="post-content">
-                    <?php echo $post['content']; // Assuming content is HTML and safe ?>
-                </div>
-                <a href="news.php" class="btn btn-outline-primary mt-4">Back to News</a>
-            </div>
-        </div>
-    <?php else: // Display list of posts ?>
-        <div class="row g-4">
-            <?php if ($posts_result->num_rows > 0): ?>
-                <?php while ($row = $posts_result->fetch_assoc()): ?>
-                    <div class="col-md-6 col-lg-4" data-animation-class="animate__fadeInUp">
-                        <div class="card h-100 shadow-sm">
-                            <?php if (!empty($row['image'])): ?>
-                                <img src="assets/uploads/<?php echo htmlspecialchars($row['image']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($row['title']); ?>" style="height: 200px; object-fit: cover;">
-                            <?php endif; ?>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-bold"><?php echo htmlspecialchars($row['title']); ?></h5>
-                                <p class="card-text text-muted flex-grow-1"><?php echo htmlspecialchars(substr($row['content'], 0, 150)) . (strlen($row['content']) > 150 ? '...' : ''); ?></p>
-                                <p class="card-text"><small class="text-muted">By <?php echo htmlspecialchars($row['username']); ?> on <?php echo date("F j, Y", strtotime($row['published_at'])); ?></small></p>
-                                <a href="news.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-primary mt-3 align-self-start">Read More</a>
-                            </div>
+<!-- News Grid Section -->
+<section class="py-16 bg-[#f5f5f0]">
+    <div class="container mx-auto px-6">
+        <?php if (!empty($posts)): ?>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <?php foreach ($posts as $post): ?>
+                    <!-- News Card -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <img src="<?php echo htmlspecialchars($post['image']); ?>" alt="<?php echo htmlspecialchars($post['title']); ?>" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-deep-charcoal mb-2"><?php echo htmlspecialchars($post['title']); ?></h3>
+                            <p class="text-sm text-gray-500 mb-4">
+                                <i class="fas fa-calendar-alt text-burnt-orange"></i> <?php echo date('F j, Y', strtotime($post['created_at'])); ?>
+                            </p>
+                            <p class="text-gray-700 mb-4"><?php echo htmlspecialchars(substr($post['content'], 0, 100)) . '...'; ?></p>
+                            <a href="#" class="inline-block bg-burnt-orange text-white py-2 px-4 rounded-full text-sm font-medium hover:bg-[#e26a0a] transition-colors duration-300">Read More</a>
                         </div>
                     </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <div class="col-12 text-center">
-                    <p class="lead">No news or updates available at the moment.</p>
-                </div>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
-</main>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center py-10">
+                <p class="text-xl text-gray-500">No news articles found at this time.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
 
 <?php
 require_once 'includes/footer.php';
